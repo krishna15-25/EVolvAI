@@ -32,9 +32,19 @@ def parse_acn_data(csv_path: str) -> pd.DataFrame:
         elif "user" in lc or "ev" in lc: col_map[col] = "userID"
     df = df.rename(columns=col_map)
     
+    if "Charging Date" in df.columns:
+        if "connectionTime" in df.columns:
+            df["connectionTime"] = df["Charging Date"] + " " + df["connectionTime"]
+        if "disconnectTime" in df.columns:
+            df["disconnectTime"] = df["Charging Date"] + " " + df["disconnectTime"]
+            
     df["connectionTime"] = pd.to_datetime(df["connectionTime"], utc=True, errors="coerce")
     df["disconnectTime"] = pd.to_datetime(df["disconnectTime"], utc=True, errors="coerce")
     df["kWhDelivered"] = pd.to_numeric(df["kWhDelivered"], errors="coerce")
+    
+    # Adjust disconnect time for cross-midnight sessions
+    cross_midnight = df["disconnectTime"] < df["connectionTime"]
+    df.loc[cross_midnight, "disconnectTime"] += pd.Timedelta(days=1)
     
     df = df.dropna(subset=["connectionTime", "disconnectTime", "kWhDelivered"])
     df = df[df["kWhDelivered"] > 0]
