@@ -1,11 +1,22 @@
+# Core Dependencies (Machine Learning & Data)
 torch
 pandas
 numpy
 pyarrow
 fastparquet
+scipy
+matplotlib
+
+# Geospatial & Network Analysis
 osmnx
 geopandas
 shapely
-scipy
+folium
+
+# Dashboard & API (Integration Layer)
+fastapi
+uvicorn
+streamlit
+streamlit-folium
+python-dotenv
 requests
-matplotlib

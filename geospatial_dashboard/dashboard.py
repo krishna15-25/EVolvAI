@@ -33,11 +33,14 @@ with st.sidebar:
     st.header("Scenario Control")
     scenario = st.selectbox(
         "Select Counterfactual Scenario",
-        options=["baseline", "winter_storm", "fleet_2x"],
+        options=["baseline", "extreme_winter_storm", "summer_peak", "full_electrification", "extreme_winter_v2", "rush_hour_gridlock"],
         format_func=lambda x: {
-            "baseline": "Baseline (Current)",
-            "winter_storm": "Winter Storm (+1.8x demand)",
-            "fleet_2x": "Fleet Electrification (2.5x demand)"
+            "baseline": "Baseline Target",
+            "extreme_winter_storm": "Extreme winter storm + 2.5x fleet",
+            "summer_peak": "High summer temperatures + 1.5x fleet",
+            "full_electrification": "Normal weather + 3.0x full fleet electrification",
+            "extreme_winter_v2": "Winter storm + full electrification + weekend",
+            "rush_hour_gridlock": "Peak rush hour with 2x fleet electrification"
         }[x]
     )
     
@@ -52,7 +55,7 @@ with st.sidebar:
     
     st.divider()
     st.markdown("**About**")
-    st.caption("This dashboard visualizes the IEEE 33-bus system mapped to Hyderabad, India.")
+    st.caption("This dashboard visualizes the IEEE 33-bus system mapped to New York City.")
 
 # ─── Get Data ────────────────────────────────────────────────
 node_data = fetch_api(f"/api/nodes/{scenario}")
@@ -95,7 +98,7 @@ st.divider()
 map_col, table_col = st.columns([2, 1])
 
 with map_col:
-    st.subheader("IEEE 33-Bus System — Hyderabad Grid Map")
+    st.subheader("IEEE 33-Bus System — New York City Grid Map")
     
     m = folium.Map(
         location=[np.mean([n["lat"] for n in nodes]), np.mean([n["lng"] for n in nodes])],

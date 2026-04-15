@@ -2,300 +2,300 @@
     "nodes": [
         {
             "node_id": 1,
-            "lat": 17.3850,
-            "lng": 78.4867,
+            "lat": 40.746,
+            "lng": -73.9664,
             "charger_count": 4,
             "transformer_overload": false,
             "gini_score": 0.22,
-            "zone": "central"
+            "zone": "Financial District"
         },
         {
             "node_id": 2,
-            "lat": 17.3920,
-            "lng": 78.4780,
+            "lat": 40.8113,
+            "lng": -73.9933,
             "charger_count": 2,
             "transformer_overload": false,
             "gini_score": 0.31,
-            "zone": "central"
+            "zone": "Financial District"
         },
         {
             "node_id": 3,
-            "lat": 17.3990,
-            "lng": 78.4700,
+            "lat": 40.7921,
+            "lng": -73.9572,
             "charger_count": 0,
             "transformer_overload": true,
             "gini_score": 0.71,
-            "zone": "north"
+            "zone": "Financial District"
         },
         {
             "node_id": 4,
-            "lat": 17.4060,
-            "lng": 78.4620,
+            "lat": 40.7418,
+            "lng": -74.0003,
             "charger_count": 5,
             "transformer_overload": false,
             "gini_score": 0.19,
-            "zone": "north"
+            "zone": "Financial District"
         },
         {
             "node_id": 5,
-            "lat": 17.4130,
-            "lng": 78.4540,
+            "lat": 40.7202,
+            "lng": -73.9469,
             "charger_count": 1,
             "transformer_overload": false,
             "gini_score": 0.55,
-            "zone": "north"
+            "zone": "Financial District"
         },
         {
             "node_id": 6,
-            "lat": 17.4200,
-            "lng": 78.4460,
+            "lat": 40.7352,
+            "lng": -73.9991,
             "charger_count": 3,
             "transformer_overload": false,
             "gini_score": 0.28,
-            "zone": "north"
+            "zone": "Chelsea"
         },
         {
             "node_id": 7,
-            "lat": 17.4270,
-            "lng": 78.4380,
+            "lat": 40.7285,
+            "lng": -73.9744,
             "charger_count": 0,
             "transformer_overload": true,
             "gini_score": 0.78,
-            "zone": "north"
+            "zone": "Chelsea"
         },
         {
             "node_id": 8,
-            "lat": 17.4340,
-            "lng": 78.4300,
+            "lat": 40.7922,
+            "lng": -73.9411,
             "charger_count": 6,
             "transformer_overload": false,
             "gini_score": 0.15,
-            "zone": "northwest"
+            "zone": "Chelsea"
         },
         {
             "node_id": 9,
-            "lat": 17.4410,
-            "lng": 78.4220,
+            "lat": 40.7411,
+            "lng": -73.962,
             "charger_count": 0,
             "transformer_overload": false,
             "gini_score": 0.62,
-            "zone": "northwest"
+            "zone": "Chelsea"
         },
         {
             "node_id": 10,
-            "lat": 17.4480,
-            "lng": 78.4140,
+            "lat": 40.8182,
+            "lng": -73.9805,
             "charger_count": 2,
             "transformer_overload": false,
             "gini_score": 0.41,
-            "zone": "northwest"
+            "zone": "Chelsea"
         },
         {
             "node_id": 11,
-            "lat": 17.4550,
-            "lng": 78.4060,
+            "lat": 40.7606,
+            "lng": -73.9645,
             "charger_count": 1,
             "transformer_overload": true,
             "gini_score": 0.69,
-            "zone": "northwest"
+            "zone": "Midtown"
         },
         {
             "node_id": 12,
-            "lat": 17.4480,
-            "lng": 78.4300,
+            "lat": 40.7465,
+            "lng": -73.9409,
             "charger_count": 4,
             "transformer_overload": false,
             "gini_score": 0.24,
-            "zone": "northwest"
+            "zone": "Midtown"
         },
         {
             "node_id": 13,
-            "lat": 17.4550,
-            "lng": 78.4380,
+            "lat": 40.7187,
+            "lng": -73.9721,
             "charger_count": 0,
             "transformer_overload": true,
             "gini_score": 0.82,
-            "zone": "north"
+            "zone": "Midtown"
         },
         {
             "node_id": 14,
-            "lat": 17.4620,
-            "lng": 78.4460,
+            "lat": 40.7189,
+            "lng": -73.954,
             "charger_count": 3,
             "transformer_overload": false,
             "gini_score": 0.33,
-            "zone": "north"
+            "zone": "Midtown"
         },
         {
             "node_id": 15,
-            "lat": 17.4690,
-            "lng": 78.4540,
+            "lat": 40.8051,
+            "lng": -73.9457,
             "charger_count": 2,
             "transformer_overload": false,
             "gini_score": 0.47,
-            "zone": "north"
+            "zone": "Midtown"
         },
         {
             "node_id": 16,
-            "lat": 17.4760,
-            "lng": 78.4620,
+            "lat": 40.703,
+            "lng": -73.9772,
             "charger_count": 5,
             "transformer_overload": false,
             "gini_score": 0.18,
-            "zone": "northeast"
+            "zone": "Upper West Side"
         },
         {
             "node_id": 17,
-            "lat": 17.4830,
-            "lng": 78.4700,
+            "lat": 40.7794,
+            "lng": -73.9723,
             "charger_count": 0,
             "transformer_overload": true,
             "gini_score": 0.76,
-            "zone": "northeast"
+            "zone": "Upper West Side"
         },
         {
             "node_id": 18,
-            "lat": 17.4900,
-            "lng": 78.4780,
+            "lat": 40.792,
+            "lng": -74.0095,
             "charger_count": 1,
             "transformer_overload": false,
             "gini_score": 0.53,
-            "zone": "northeast"
+            "zone": "Upper West Side"
         },
         {
             "node_id": 19,
-            "lat": 17.3780,
-            "lng": 78.4950,
+            "lat": 40.7832,
+            "lng": -73.9721,
             "charger_count": 3,
             "transformer_overload": false,
             "gini_score": 0.37,
-            "zone": "east"
+            "zone": "Upper West Side"
         },
         {
             "node_id": 20,
-            "lat": 17.3710,
-            "lng": 78.5030,
+            "lat": 40.7507,
+            "lng": -73.9439,
             "charger_count": 4,
             "transformer_overload": false,
             "gini_score": 0.26,
-            "zone": "east"
+            "zone": "Upper West Side"
         },
         {
             "node_id": 21,
-            "lat": 17.3640,
-            "lng": 78.5110,
+            "lat": 40.8017,
+            "lng": -73.9577,
             "charger_count": 0,
             "transformer_overload": true,
             "gini_score": 0.85,
-            "zone": "east"
+            "zone": "Harlem"
         },
         {
             "node_id": 22,
-            "lat": 17.3570,
-            "lng": 78.5190,
+            "lat": 40.7109,
+            "lng": -73.9944,
             "charger_count": 2,
             "transformer_overload": false,
             "gini_score": 0.43,
-            "zone": "southeast"
+            "zone": "Harlem"
         },
         {
             "node_id": 23,
-            "lat": 17.3500,
-            "lng": 78.5270,
+            "lat": 40.8002,
+            "lng": -73.943,
             "charger_count": 1,
             "transformer_overload": false,
             "gini_score": 0.58,
-            "zone": "southeast"
+            "zone": "Harlem"
         },
         {
             "node_id": 24,
-            "lat": 17.3640,
-            "lng": 78.4950,
+            "lat": 40.7694,
+            "lng": -74.0083,
             "charger_count": 6,
             "transformer_overload": false,
             "gini_score": 0.13,
-            "zone": "east"
+            "zone": "Harlem"
         },
         {
             "node_id": 25,
-            "lat": 17.3570,
-            "lng": 78.4870,
+            "lat": 40.7511,
+            "lng": -74.0051,
             "charger_count": 0,
             "transformer_overload": true,
             "gini_score": 0.79,
-            "zone": "south"
+            "zone": "Harlem"
         },
         {
             "node_id": 26,
-            "lat": 17.3500,
-            "lng": 78.4790,
+            "lat": 40.7212,
+            "lng": -73.9614,
             "charger_count": 3,
             "transformer_overload": false,
-            "gini_score": 0.30,
-            "zone": "south"
+            "gini_score": 0.3,
+            "zone": "Williamsburg"
         },
         {
             "node_id": 27,
-            "lat": 17.3430,
-            "lng": 78.4710,
+            "lat": 40.7713,
+            "lng": -74.0023,
             "charger_count": 2,
             "transformer_overload": false,
             "gini_score": 0.45,
-            "zone": "south"
+            "zone": "Williamsburg"
         },
         {
             "node_id": 28,
-            "lat": 17.3360,
-            "lng": 78.4630,
+            "lat": 40.7684,
+            "lng": -73.9864,
             "charger_count": 4,
             "transformer_overload": false,
             "gini_score": 0.21,
-            "zone": "south"
+            "zone": "Williamsburg"
         },
         {
             "node_id": 29,
-            "lat": 17.3290,
-            "lng": 78.4550,
+            "lat": 40.7934,
+            "lng": -73.9469,
             "charger_count": 0,
             "transformer_overload": true,
             "gini_score": 0.88,
-            "zone": "southwest"
+            "zone": "Williamsburg"
         },
         {
             "node_id": 30,
-            "lat": 17.3780,
-            "lng": 78.4710,
+            "lat": 40.7704,
+            "lng": -73.9821,
             "charger_count": 1,
             "transformer_overload": false,
-            "gini_score": 0.50,
-            "zone": "west"
+            "gini_score": 0.5,
+            "zone": "Williamsburg"
         },
         {
             "node_id": 31,
-            "lat": 17.3710,
-            "lng": 78.4630,
+            "lat": 40.7196,
+            "lng": -73.9808,
             "charger_count": 3,
             "transformer_overload": false,
             "gini_score": 0.35,
-            "zone": "west"
+            "zone": "DUMBO"
         },
         {
             "node_id": 32,
-            "lat": 17.3640,
-            "lng": 78.4550,
+            "lat": 40.815,
+            "lng": -73.9473,
             "charger_count": 5,
             "transformer_overload": false,
             "gini_score": 0.17,
-            "zone": "west"
+            "zone": "DUMBO"
         },
         {
             "node_id": 33,
-            "lat": 17.3570,
-            "lng": 78.4470,
+            "lat": 40.7366,
+            "lng": -73.9957,
             "charger_count": 0,
             "transformer_overload": true,
             "gini_score": 0.91,
-            "zone": "southwest"
+            "zone": "DUMBO"
         }
     ]
 }

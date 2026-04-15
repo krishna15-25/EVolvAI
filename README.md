@@ -1,37 +1,29 @@
-# EVolvAI: Generative Learning & Evolution Framework
+# EVolvAI: Generative Scenario Planning for EV Demand
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-> **Autonomous Evolution of Generative Core Architectures.**
+> **Causal Demand Forecasting via Generative Counterfactuals.**
 
-EVolvAI is a specialized framework designed to automate the training and architectural evolution of generative AI models. By leveraging an environment-graph based data pipeline, the system dynamically adapts its generative core to optimize for specific output domains, from synthetic data generation to dashboard-driven model monitoring.
+EVolvAI is a specialized framework designed to forecast Electric Vehicle (EV) charging demand using a **Generative Causal Demand VAE (GCD-VAE)**. The system enables "Scenario Planning" by intervening on causal factors like weather, fleet size, and traffic volume to predict grid stress.
 
-## 🚀 The Core Concept: Self-Optimizing Nets
-Traditional generative models require manual hyperparameter tuning and architecture design. EVolvAI introduces an evolutionary layer that monitors model performance via a frontend dashboard and feeds structural "mutations" back into the generative core.
+## 🚀 Geographic Scope: New York City
+The framework is currently calibrated for **New York City (Manhattan & Brooklyn)**, integrating:
+- **PlugNYC Data**: Extensive real-world charging session logs from NYC DOT.
+- **Caltech ACN-Data**: High-granularity behavioral distributions.
+- **IEEE 33-Bus Topology**: CAN-standard grid physics mapped to NYC neighborhoods.
 
-## 🛠️ Key Components
-- **Generative Core**: The primary model architecture undergoing training and evolution.
-- **Environment Graph**: A structured representation of the training data and its relationships, enabling complex context-aware generation.
-- **Frontend Dashboard**: Real-time visualization of model fitness, loss curves, and architectural changes.
-- **Data Pipeline**: Automated ingestion and sanitization of domain-specific datasets.
-
----
-
-## 🏗️ Technical Architecture
-
-- **Training Engine**: PyTorch-based training loops with integrated checkpointing.
-- **Evolutionary Controller**: Genetic algorithms that optimize model topology.
-- **Dashboard API**: Lightweight interface for piping metrics to the frontend.
-
----
+## 🏗️ Integrated Architecture
+The project follows a **Model-In-The-Loop** workflow:
+1. **Data Pipeline**: Sources charging behavioral data from NYC municipal datasets.
+2. **Generative Core**: Trains a TCN-VAE to learn the latent space of demand.
+3. **Scenario Generator**: Produces NumPy tensors (`.npy`) for specific counterfactuals (e.g., "Extreme Winter Storm").
+4. **Geospatial Dashboard**: A FastAPI + Streamlit interface that visualizes these tensors on a real-world map of the NYC grid.
 
 ## 📂 Project Structure
-
-- `generative_core/`: Source code for the generative models.
-- `environment_graph/`: Logic for the graph-based data representation.
-- `data_pipeline/`: Modules for data loading and preprocessing.
-- `frontend_dashboard/`: Web-based monitoring interface.
-- `Archives/`: Historical roadmaps, training data descriptions, and design docs.
+- `generative_core/`: GCD-VAE architecture, training, and generation logic.
+- `data_pipeline/`: Modules for OSMnx road network and traffic volume processing.
+- `geospatial_dashboard/`: Interactive visualization and REST API.
+- `output/`: Trained checkpoints and generated scenario tensors.
 
 ## 🚦 Quick Start
 
@@ -42,16 +34,16 @@ cd EVolvAI
 pip install -r requirements.txt
 ```
 
-### Running Training
+### Running the Full Pipeline
 ```bash
-# Start the core generative training loop
-python run.py
-```
+# Generate scenarios from the trained model
+python run.py generate
 
-### Launch Dashboard
-```bash
-# Navigate to the dashboard directory and follow the local instructions
-cd frontend_dashboard/
+# Launch Dashboard
+cd geospatial_dashboard
+pip install -r requirements.txt
+python -m uvicorn api:app --reload &
+streamlit run dashboard.py
 ```
 
 ## 📜 License

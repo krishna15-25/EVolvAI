@@ -7,3 +7,4 @@ requests
 numpy
 pandas
 python-dotenv
+python-dotenv

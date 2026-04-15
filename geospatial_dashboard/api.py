@@ -13,7 +13,7 @@ OCMAP_API_KEY = os.getenv("OCMAP_API_KEY")
 
 app = FastAPI(
     title="EVolvAI API",
-    description="REST API for EV Infrastructure Dashboard — IEEE IES Hackathon",
+    description="REST API for EV Infrastructure Dashboard (NYC) — IEEE IES Hackathon",
     version="1.0.0"
 )
 
@@ -36,35 +36,88 @@ SCENARIOS = {
         "label": "Baseline",
         "demand_multiplier": 1.0,
         "temp_drop": 0,
-        "overload_threshold": 0.70
+        "overload_threshold": 0.80
     },
-    "winter_storm": {
-        "label": "Winter Storm",
-        "demand_multiplier": 1.8,
-        "temp_drop": 15,
-        "overload_threshold": 0.50   # more nodes overload under stress
-    },
-    "fleet_2x": {
-        "label": "Fleet 2.5x Electrification",
+    "extreme_winter_storm": {
+        "label": "Extreme winter storm + 2.5x fleet",
         "demand_multiplier": 2.5,
+        "temp_drop": 15,
+        "overload_threshold": 0.45
+    },
+    "summer_peak": {
+        "label": "High summer temperatures + 1.5x fleet",
+        "demand_multiplier": 1.5,
+        "temp_drop": -10,
+        "overload_threshold": 0.65
+    },
+    "full_electrification": {
+        "label": "Normal weather + 3.0x full fleet electrification",
+        "demand_multiplier": 3.0,
         "temp_drop": 0,
-        "overload_threshold": 0.40
+        "overload_threshold": 0.35
+    },
+    "extreme_winter_v2": {
+        "label": "Winter storm + full electrification + weekend",
+        "demand_multiplier": 2.5,
+        "temp_drop": 15,
+        "overload_threshold": 0.45
+    },
+    "rush_hour_gridlock": {
+        "label": "Peak rush hour with 2x fleet electrification",
+        "demand_multiplier": 2.0,
+        "temp_drop": 0,
+        "overload_threshold": 0.55
     }
 }
 
 
 def apply_scenario(nodes: list, scenario_key: str) -> list:
-    """Apply scenario multipliers to node data."""
+    """Apply scenario multipliers or actual model output to node data."""
     config = SCENARIOS[scenario_key]
+    
+    # Try to load real model output from ../output/
+    # The generative core output is typically [24, 32] --> [SEQ_LEN, NUM_NODES]
+    model_output = None
+    # Check both potential naming conventions seen in output/
+    paths_to_check = [
+        os.path.join("..", "output", f"{scenario_key}.npy"),
+        os.path.join("..", "output", f"scenario_{scenario_key}.npy")
+    ]
+    
+    for path in paths_to_check:
+        if os.path.exists(path):
+            try:
+                data = np.load(path)
+                # If shape is [24, 32], take the peak demand per node
+                if data.ndim == 2:
+                    model_output = np.max(data, axis=0)
+                    break
+            except Exception as e:
+                print(f"Error loading model output from {path}: {e}")
+
     result = []
     for node in nodes:
         adjusted = dict(node)
-        # Under stress, nodes with high gini (underserved) are most likely to overload
+        
+        # Determine demand
+        if model_output is not None and node["node_id"] > 1:
+            # Map node_id (2..33) to model_output index (0..31)
+            node_idx = min(node["node_id"] - 2, len(model_output) - 1)
+            demand = float(model_output[node_idx])
+            adjusted["effective_demand_kw"] = round(demand, 2)
+        else:
+            # Fallback or substation baseline
+            base = node["charger_count"] * 7.2
+            if node["node_id"] == 1:
+                # Substation node usually has high base demand but we use it as a reference
+                adjusted["effective_demand_kw"] = round(base * config["demand_multiplier"], 2)
+            else:
+                adjusted["effective_demand_kw"] = round(base * config["demand_multiplier"], 2)
+
+        # Update overload status based on the new demand vs threshold
+        # In a real system this would be based on xfmr capacity, here we use gini as a proxy for stress
         adjusted["transformer_overload"] = node["gini_score"] > config["overload_threshold"]
-        # Effective demand increases but charger count stays same (that's the problem)
-        adjusted["effective_demand_kw"] = round(
-            node["charger_count"] * 7.2 * config["demand_multiplier"], 2
-        )
+        
         result.append(adjusted)
     return result
 
@@ -90,7 +143,7 @@ def get_all_nodes():
 def get_nodes_by_scenario(scenario: str):
     """
     Return nodes adjusted for a specific scenario.
-    Options: baseline | winter_storm | fleet_2x
+    Options: baseline | extreme_winter_storm | summer_peak | full_electrification | extreme_winter_v2 | rush_hour_gridlock
     """
     if scenario not in SCENARIOS:
         raise HTTPException(
@@ -158,14 +211,14 @@ def get_real_chargers():
             "https://api.openchargemap.io/v3/poi/",
             params={
                 "key": OCMAP_API_KEY,
-                "latitude": 17.3850,
-                "longitude": 78.4867,
-                "distance": 10000,
+                "latitude": 40.7580,
+                "longitude": -73.9855,
+                "distance": 20,
                 "distanceunit": "km",
                 "maxresults": 100,
                 "compact": True,
                 "verbose": False,
-                "countrycode": "IN",
+                "countrycode": "US",
             },
             headers={"User-Agent": "EVolvAI-Dashboard/1.0"},
             timeout=10
