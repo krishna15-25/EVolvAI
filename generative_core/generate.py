@@ -151,7 +151,12 @@ def generate_all_scenarios(model=None,
         FileNotFoundError: Propagated from load_model if no checkpoint exists.
     """
     if model is None:
-        model, device = load_model(device)
+        try:
+            model, device = load_model(device)
+        except (RuntimeError, KeyError, FileNotFoundError) as e:
+            print(f"\n⚠️  [Warning] Model architecture mismatch or missing file: {e}")
+            print("   Falling back to pre-existing .npy scenarios in output/ folder.")
+            return {}
     else:
         device = _resolve_device(model, device)
 

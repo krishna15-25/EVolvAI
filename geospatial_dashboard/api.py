@@ -204,6 +204,20 @@ def get_scenarios():
     """Return list of available scenarios."""
     return {"scenarios": list(SCENARIOS.keys()), "details": SCENARIOS}
 
+@app.get("/api/optimal-layout")
+def get_optimal_layout():
+    """Return the final optimal charger layout from the Risk Engine GA."""
+    # Check both potential output directory locations
+    paths = [
+        os.path.join("..", "output", "final_optimal_layout.json"),
+        os.path.join("..", "output", "output", "final_optimal_layout.json")
+    ]
+    for path in paths:
+        if os.path.exists(path):
+            with open(path) as f:
+                return json.load(f)
+    return {"error": "Optimal layout not found. Make sure to run risk_engine/optimizer_ga.py first."}
+
 @app.get("/api/real_chargers")
 def get_real_chargers():
     try:

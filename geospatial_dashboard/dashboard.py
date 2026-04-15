@@ -45,12 +45,14 @@ with st.sidebar:
     )
     
     show_real = st.checkbox("Show real EV chargers (OpenChargeMap)", value=True)
+    show_optimal = st.checkbox("Show Recommended EV Chargers (Risk Engine)", value=False)
     
     st.divider()
     st.markdown("**Color Legend**")
     st.markdown("🟢 Green = Node operating normally")
     st.markdown("🔴 Red = Transformer overloaded")
     st.markdown("⚪ Circle size = Charger count")
+    st.markdown("🟡 Gold ring = GA Recommended Placement")
     st.markdown("🔵 Blue = Real world EV charger")
     
     st.divider()
@@ -76,6 +78,16 @@ if show_real:
         st.sidebar.success(f"Showing {len(real_chargers)} real chargers")
     else:
         st.sidebar.warning(f"Could not load real chargers: {real_data.get('error', 'Unknown error')}")
+
+# Fetch optimal layout if enabled
+optimal_layout = None
+if show_optimal:
+    opt_data = fetch_api("/api/optimal-layout")
+    if "bus_ids" in opt_data:
+        optimal_layout = {str(b): p for b, p in zip(opt_data["bus_ids"], opt_data["power_kw"])}
+        st.sidebar.success("Optimal locations loaded!")
+    else:
+        st.sidebar.warning(opt_data.get("error", "Failed to load optimal layout."))
 
 # ─── Top Metrics Row ─────────────────────────────────────────
 col1, col2, col3, col4 = st.columns(4)
@@ -118,6 +130,21 @@ with map_col:
             tooltip=f"Node {node['node_id']} | Chargers: {node['charger_count']}",
             popup=f"Node {node['node_id']}<br>Zone: {node['zone']}<br>Chargers: {node['charger_count']}"
         ).add_to(m)
+
+        if optimal_layout:
+            bus_id_str = str(node["node_id"])
+            if bus_id_str in optimal_layout:
+                opt_power = optimal_layout[bus_id_str]
+                if opt_power > 0:
+                    opt_chargers = int(opt_power / 50.0)
+                    folium.CircleMarker(
+                        location=[node["lat"], node["lng"]],
+                        radius=max(8, opt_chargers * 4.0),
+                        color="gold",
+                        weight=3,
+                        fill=False,
+                        tooltip=f"GA RECOMMENDED: {opt_chargers} ports",
+                    ).add_to(m)
         
         folium.Marker(
             location=[node["lat"], node["lng"]],
