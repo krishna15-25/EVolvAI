@@ -93,7 +93,15 @@ if show_optimal:
 col1, col2, col3, col4 = st.columns(4)
 with col1:
     gini_val = gini_data.get("gini_index", "N/A")
-    st.metric("Gini Accessibility Index", f"{gini_val:.3f}" if isinstance(gini_val, float) else gini_val)
+    label = "Gini Accessibility Index"
+    
+    # If showing optimal layout, prioritize the GA's Equity Score
+    if show_optimal and optimal_layout and isinstance(opt_data.get("gini_index"), (float, int)):
+        gini_val = opt_data["gini_index"]
+        label = "Equity Score (Gini)"
+        st.metric(label, f"{gini_val:.3f}", help="Optimized by the EVolvAI Equity Engine")
+    else:
+        st.metric(label, f"{gini_val:.3f}" if isinstance(gini_val, float) else gini_val)
 with col2:
     overloaded = sum(1 for n in nodes if n["transformer_overload"])
     st.metric("Overloaded Transformers", f"{overloaded} / {len(nodes)}", f"{overloaded} at risk", delta_color="inverse")

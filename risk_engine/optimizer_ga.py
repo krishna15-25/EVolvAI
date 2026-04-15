@@ -106,6 +106,10 @@ class EVOptimizerConfig:
     grid_penalty_weight: float = 1.0
     grid_capacity_per_node: float = 5.0            # soft cap
 
+    # ── Social Equity (Gini) ─────────────────────────────────────────
+    gini_threshold: float = 0.35                   # Locked equity hurdle
+    gini_penalty_weight: float = 2_000_000.0       # Massive tripwire penalty
+
     # ── Termination ──────────────────────────────────────────────────
     max_generations: int = 300
     convergence_window: int = 30
@@ -219,6 +223,33 @@ def calculate_cvar(
 
 
 # =====================================================================
+# §3.1 SOCIAL EQUITY (GINI INDEX)
+# =====================================================================
+def calculate_gini_index(chromosome: NDArray[np.int32]) -> float:
+    """
+    Calculate the Gini coefficient for the charger distribution.
+    Matches logic in geospatial_dashboard/gini.py.
+    
+    0 = perfect equality (chargers evenly spread)
+    1 = perfect inequality (all chargers in one place)
+    """
+    # Accessibility scores: nodes with 0 chargers get 0.01 to represent
+    # minimal 'emergency' coverage/hope, but still penalize heavily.
+    scores = np.where(chromosome > 0, chromosome.astype(float), 0.01)
+    
+    if scores.sum() == 0:
+        return 0.0
+    
+    n = len(scores)
+    sorted_scores = np.sort(scores)
+    index = np.arange(1, n + 1)
+    
+    # Gini formula implementation
+    gini = (2 * np.sum(index * sorted_scores) - (n + 1) * np.sum(sorted_scores)) / (n * np.sum(sorted_scores))
+    return float(gini)
+
+
+# =====================================================================
 # §4  MULTI-OBJECTIVE FITNESS FUNCTION
 # =====================================================================
 def evaluate_fitness(
@@ -315,8 +346,18 @@ def evaluate_fitness(
     # CVaR of the scenario cost distribution
     cvar_cost = calculate_cvar(scenario_costs, alpha=config.cvar_alpha)
 
+    # ── 5. Social Equity (Gini) Tripwire ─────────────────────────────
+    # This is the "Option 2" implementation: Equity as a Hard Constraint.
+    gini = calculate_gini_index(chromosome)
+    gini_penalty = 0.0
+    if gini > config.gini_threshold:
+        # Slam the layout with a massive penalty if it exceeds the inequality threshold.
+        # This forces the GA to select more distributed layouts even if they are
+        # slightly more expensive in CapEx or Grid Stress.
+        gini_penalty = config.gini_penalty_weight * (1.0 + (gini - config.gini_threshold) * 10.0)
+
     # ── Composite fitness (all terms in USD-equivalent) ──────────────
-    fitness = capex + wait_cost + grid_cost + cvar_cost
+    fitness = capex + wait_cost + grid_cost + cvar_cost + gini_penalty
     return float(fitness)
 
 

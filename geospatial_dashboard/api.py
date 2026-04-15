@@ -215,7 +215,20 @@ def get_optimal_layout():
     for path in paths:
         if os.path.exists(path):
             with open(path) as f:
-                return json.load(f)
+                data = json.load(f)
+                
+                # Calculate Gini Index to prove the "Equity Engine" worked
+                try:
+                    # Convert power_kw (recommendations) to charger counts for Gini indexing
+                    # 50 kW per port as per optimizer_ga.py standards
+                    temp_nodes = [{"charger_count": int(p / 50.0)} for p in data["power_kw"]]
+                    scores = get_accessibility_scores(temp_nodes)
+                    data["gini_index"] = calculate_gini(scores)
+                except Exception as e:
+                    print(f"Gini calculation error: {e}")
+                    data["gini_index"] = "Error"
+                
+                return data
     return {"error": "Optimal layout not found. Make sure to run risk_engine/optimizer_ga.py first."}
 
 @app.get("/api/real_chargers")
