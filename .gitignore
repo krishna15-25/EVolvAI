@@ -35,7 +35,6 @@ Archives/
 *.log
 *.txt
 output/
-
 # Data
 data/
 data_pipeline/cache/
